@@ -5,6 +5,9 @@
  */
 package spacemap;
 
+import spacemap.model.DefaultModel;
+import spacemap.view.DefaultView;
+
 /**
  *
  * @author Keith
@@ -15,7 +18,11 @@ public class SpaceMap {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        DefaultModel model = new DefaultModel();
+        DefaultView view = new DefaultView();
+        
+        ApplicationController controller = new ApplicationController(model, view);
+        controller.launch();
     }
     
 }

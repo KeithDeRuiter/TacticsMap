@@ -6,6 +6,7 @@
 package spacemap;
 
 import java.util.UUID;
+import spacemap.model.track.HostilityLevel;
 import spacemap.model.track.Position;
 
 /**
@@ -16,8 +17,10 @@ public interface ViewListener {
     /** 
      * Indicates that a track should be created at the specified location.
      * @param position The position of the new track.
+     * @param hostility The hostility of the new track.
+     * @param name The name of the new track.
      */
-    public void createTrackAt(Position position);
+    public void createTrack(Position position, HostilityLevel hostility, String name);
     
     /**
      * Indicates that the track with the given ID should be deleted.

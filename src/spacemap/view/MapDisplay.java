@@ -9,9 +9,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -77,6 +74,12 @@ public class MapDisplay {
         component.repaint();
     }
     
+    public void setDeclutterEnabled(boolean state) {
+        if (state) {
+            
+        }
+    }
+    
     public JComponent getComponent() {
         return component;
     }
@@ -113,6 +116,15 @@ public class MapDisplay {
             //Render Background
             g2d.setColor(Color.BLACK);
             g2d.fillRect(0, 0, getWidth(), getHeight());
+            
+            //Render grid lines
+            g2d.setColor(Color.GRAY);
+            for(int i = 0; i < this.getWidth(); i+=100) { //draw verticals
+                g2d.drawLine(i, 0, i, this.getHeight());
+            }
+            for(int i = 0; i < this.getHeight(); i+=100) { //draw horizontals
+                g2d.drawLine(0, i, this.getWidth(), i);
+            }
             
             //Render Renderables
             renderables.stream().forEach((r) -> {

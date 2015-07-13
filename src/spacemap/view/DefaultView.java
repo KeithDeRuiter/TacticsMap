@@ -186,7 +186,7 @@ public class DefaultView implements View {
     
     @Override
     public void setDeclutterEnabled(boolean state) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        map.setDeclutterEnabled(state);
     }
 
     @Override

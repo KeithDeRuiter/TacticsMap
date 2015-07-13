@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Keith
  */
 public class RenderableGroup {
-
+    
     private final Set<RenderableText> m_texts;
 
     private final Set<RenderableLine> m_lines;

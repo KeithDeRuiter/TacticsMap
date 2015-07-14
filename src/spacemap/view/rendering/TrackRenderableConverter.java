@@ -1,46 +1,37 @@
 package spacemap.view.rendering;
 
-import java.awt.FontMetrics;
 import spacemap.model.track.Track;
 
 /**
  * A renderable converter for a Track.
- * @author adam
+ * @author Keith
  */
 public class TrackRenderableConverter {
-
-    private final FontMetrics m_fontMetrics;
-    
-    private static final int LABEL_OFFSET = RenderableSymbol.BOX_SIDE;
     
     /**
      * Creates a new TrackRenderableConverter.
-     * @param fontMetrics the metrics to use for text.
      */
-    public TrackRenderableConverter(FontMetrics fontMetrics){
-        m_fontMetrics = fontMetrics;
+    public TrackRenderableConverter(){
     }
-
     
-    public RenderableGroup generateRenderableGroup(Track track, Coordinates anchorPoint) {
-        RenderableText text = generateRenderableText(track, anchorPoint);
-        RenderableSymbol symbol = generateRenderableSymbol(track, anchorPoint);
+    public RenderableGroup generateRenderableGroup(Track track) {
+        RenderableText text = generateRenderableText(track);
+        RenderableSymbol symbol = generateRenderableSymbol(track);
         
-        RenderableGroup group = new RenderableGroup();
+        RenderableGroup group = new RenderableGroup(track.getId());
         group.addText(text);
         group.addSymbol(symbol);
         
         return group;
     }
     
-    public RenderableText generateRenderableText(Track track, Coordinates anchorPoint) {
-        Coordinates labelCoords = new Coordinates(anchorPoint.getX() + LABEL_OFFSET, anchorPoint.getY());
-        RenderableText text = new RenderableText(labelCoords, track.getName(), track.getHostility().getColor(), track.getId(), m_fontMetrics);
+    private RenderableText generateRenderableText(Track track) {
+        RenderableText text = new RenderableText(track.getName(), track.getHostility().getColor());
         return text;
     }
 
-    public RenderableSymbol generateRenderableSymbol(Track track, Coordinates anchorPoint){
-        return new RenderableSymbol(anchorPoint, track.getHostility().getColor(), track.getId());
+    private RenderableSymbol generateRenderableSymbol(Track track){
+        return new RenderableSymbol(track.getHostility().getColor());
     }
 
 }

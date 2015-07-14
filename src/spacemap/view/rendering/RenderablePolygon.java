@@ -3,7 +3,6 @@ package spacemap.view.rendering;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.Rectangle;
 
 /**
  *
@@ -28,13 +27,4 @@ public class RenderablePolygon extends Renderable {
         g2d.drawPolygon(m_polygon);
     }
 
-    @Override
-    public Rectangle getBounds() {
-        return m_polygon.getBounds();
-    }
-
-    @Override
-    public void translate(int dx, int dy) {
-        m_polygon.translate(dy, dy);
-    }
 }

@@ -7,7 +7,8 @@ package spacemap.view;
 
 import java.util.UUID;
 import spacemap.ViewListener;
-import spacemap.model.track.Track;
+import spacemap.model.track.Position;
+import spacemap.view.rendering.RenderableGroup;
 
 /**
  * Interface to describe a view for the tactics map.
@@ -23,9 +24,10 @@ public interface View {
     
     /**
      * Adds or updates a Track to the view.
-     * @param track The track to be added or updated.
+     * @param renderableGroup The {@link RenderableGroup} to place in the view
+     * @param position The position on the map to place the renderables.
      */
-    public void addOrUpdateTrackToView(Track track);
+    public void addOrUpdateRenderables(RenderableGroup renderableGroup, Position position);
     
     /**
      * Removes the object with the given UUID from the view.

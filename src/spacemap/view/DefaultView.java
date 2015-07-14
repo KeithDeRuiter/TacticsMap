@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ import javax.swing.JTextField;
 import spacemap.ViewListener;
 import spacemap.model.track.HostilityLevel;
 import spacemap.model.track.Position;
-import spacemap.model.track.Track;
 import spacemap.view.rendering.Coordinates;
+import spacemap.view.rendering.RenderableGroup;
 
 /**
  * The default map view.
@@ -190,14 +189,14 @@ public class DefaultView implements View {
     }
 
     @Override
-    public void addOrUpdateTrackToView(Track track) {
-        trackIds.add(track.getId());
-        map.addRenderablesForTrack(track);
+    public void addOrUpdateRenderables(RenderableGroup renderableGroup, Position position) {
+        trackIds.add(renderableGroup.getUuid());
+        map.addRenderableGroup(renderableGroup, position);
     }
 
     @Override
     public void removeTrackFromView(UUID id) {
-        map.removeRenderablesForTrack(id);
+        map.removeRenderablesForGroup(id);
     }
     
     @Override

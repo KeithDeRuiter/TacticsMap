@@ -6,73 +6,50 @@
 package spacemap.view;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import javax.swing.JComponent;
 import spacemap.model.track.Position;
-import spacemap.model.track.Track;
 import spacemap.view.rendering.Coordinates;
-import spacemap.view.rendering.Renderable;
 import spacemap.view.rendering.RenderableGroup;
-import spacemap.view.rendering.TrackRenderableConverter;
+import spacemap.view.rendering.RenderableSymbol;
 
 /**
  *
  * @author Keith
  */
 public class MapDisplay {
-    
-    private final Set<Renderable> renderables;
 
-    private final Map<UUID, RenderableGroup> trackRenderableGroups;
-    
-    private TrackRenderableConverter trackRenderableConverter;
+    private final Map<UUID, IndividualGroupConfiguration> trackRenderableGroupConfigurations;
     
     private final DisplayComponent component;
     
     public MapDisplay() {
-        renderables = new HashSet<>();
-        trackRenderableGroups = new HashMap<>();
+        trackRenderableGroupConfigurations = new HashMap<>();
         component = new DisplayComponent();
     }
     
-    public void addRenderablesForTrack(Track track) {
-        Coordinates trackCoordinates = getScreenCoordinatesForPosition(track.getPosition());
-        RenderableGroup group = trackRenderableConverter.generateRenderableGroup(track, trackCoordinates);
+    public void addRenderableGroup(RenderableGroup group, Position position) {
+        IndividualGroupConfiguration config = new IndividualGroupConfiguration(group, position);
+        trackRenderableGroupConfigurations.put(group.getUuid(), config);
         
-        trackRenderableGroups.put(track.getId(), group);
-        group.getAllRenderables().stream().forEach((r) -> {
-            addRenderable(r);
-        });
+        component.repaint();
     }
     
-    public void removeRenderablesForTrack(UUID id) {
-        RenderableGroup group = trackRenderableGroups.get(id);
-        if (group == null) {
+    public void removeRenderablesForGroup(UUID id) {
+        if (!trackRenderableGroupConfigurations.containsKey(id)) {
             System.out.println("Cannot remove renderables for Track " + id + ", ID does not exist in the Map Display");
             return;
         }
         
-        group.getAllRenderables().stream().forEach((r) -> {
-            removeRenderable(r);
-        });
-    }
-    
-    public void addRenderable(Renderable r) {
-        renderables.add(r);
+        trackRenderableGroupConfigurations.remove(id);
+        
         component.repaint();
     }
-    
-    public void removeRenderable(Renderable r) {
-        renderables.remove(r);
-        component.repaint();
-    }
+
     
     public void setDeclutterEnabled(boolean state) {
         if (state) {
@@ -105,13 +82,10 @@ public class MapDisplay {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D g2d = (Graphics2D) g.create();
             
             //Initialize font metrics
-            if(trackRenderableConverter == null) {
-                FontMetrics fm = g2d.getFontMetrics();
-                trackRenderableConverter = new TrackRenderableConverter(fm);
-            }
+            
 
             //Render Background
             g2d.setColor(Color.BLACK);
@@ -127,9 +101,44 @@ public class MapDisplay {
             }
             
             //Render Renderables
-            renderables.stream().forEach((r) -> {
-                r.render(g2d);
+            trackRenderableGroupConfigurations.values().stream().forEach((c) -> {
+                //Get graphics to transform and render this group
+                Coordinates coords = getScreenCoordinatesForPosition(c.getPosition());
+                Graphics2D groupGraphics = (Graphics2D)g2d.create();
+                groupGraphics.translate(coords.getX(), coords.getY());
+                
+                //Do rendering
+                //Symbols
+                c.getGroup().getSymbols().stream().forEach((r) -> {
+                    r.render(groupGraphics);
+                });
+                
+                groupGraphics.translate(RenderableSymbol.BOX_SIDE, 0);
+                c.getGroup().getTexts().stream().forEach((r) -> {
+                    r.render(groupGraphics);
+                });
+
+                //Dispose graphics, no longer necessary
+                groupGraphics.dispose();
             });
         }    
+    }
+    
+    private class IndividualGroupConfiguration {
+        private final RenderableGroup group;
+        private final Position position;
+
+        public IndividualGroupConfiguration(RenderableGroup group, Position position) {
+            this.group = group;
+            this.position = position;
+        }
+
+        public RenderableGroup getGroup() {
+            return group;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
     }
 }

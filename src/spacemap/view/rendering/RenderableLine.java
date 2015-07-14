@@ -41,15 +41,4 @@ public class RenderableLine extends Renderable {
         g2d.setColor(getColor());
         g2d.drawLine(m_firstPoint.getX(), m_firstPoint.getY(), m_secondPoint.getX(), m_secondPoint.getY());
     }
-
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle(Math.min(getFirstX(), getSecondX()), Math.min(getFirstY(), getSecondY()), Math.max(getFirstX(), getSecondX()), Math.max(getFirstY(), getSecondY()));
-    }
-
-    @Override
-    public void translate(int dx, int dy) {
-        m_firstPoint.translate(dx, dy);
-        m_secondPoint.translate(dx, dy);
-    }
 }

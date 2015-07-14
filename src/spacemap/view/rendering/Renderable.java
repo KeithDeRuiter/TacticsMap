@@ -29,18 +29,18 @@ public abstract class Renderable {
         return color;
     }
 
-    /**
-     * Gets the bounding box of this renderable.
-     * @return 
-     */
-    public abstract Rectangle getBounds();
-    
-    /**
-     * Moves the renderable by (dx, dy)
-     * @param dx x movement
-     * @param dy y movement
-     */
-    public abstract void translate(int dx, int dy);
+//    /**
+//     * Gets the bounding box of this renderable.
+//     * @return 
+//     */
+//    public abstract Rectangle getBounds();
+//    
+//    /**
+//     * Moves the renderable by (dx, dy)
+//     * @param dx x movement
+//     * @param dy y movement
+//     */
+//    public abstract void translate(int dx, int dy);
     
     /**
      * Renders the renderable using the given {@code Graphics}.
@@ -48,9 +48,4 @@ public abstract class Renderable {
      */
     public abstract void render(Graphics2D g2d);
     
-    
-    @Override
-    public String toString() {
-        return "(" + getBounds().x + ", " + getBounds().y + ")  " + getBounds().width + " x " + getBounds().height;
-    }
 }

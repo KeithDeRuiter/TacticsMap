@@ -5,6 +5,8 @@
  */
 package spacemap;
 
+import java.util.HashMap;
+import java.util.Map;
 import spacemap.model.ModelListener;
 import java.util.UUID;
 import spacemap.model.Model;
@@ -12,6 +14,8 @@ import spacemap.model.ModelEvent;
 import spacemap.model.track.HostilityLevel;
 import spacemap.model.track.Position;
 import spacemap.view.View;
+import spacemap.view.rendering.RenderableGroup;
+import spacemap.view.rendering.TrackRenderableConverter;
 
 /**
  *
@@ -19,13 +23,19 @@ import spacemap.view.View;
  */
 public class ApplicationController implements ModelListener, ViewListener {
     
-    View view;
+    private View view;
     
-    Model model;
+    private Model model;
+    
+    private TrackRenderableConverter trackRenderableConverter;
+    
+    private final Map<UUID, RenderableGroup> trackRenderables;
 
     public ApplicationController(Model model, View view) {
         this.model = model;
         this.view = view;
+        trackRenderables = new HashMap<>();
+        trackRenderableConverter = new TrackRenderableConverter();
     }
     
     
@@ -51,7 +61,10 @@ public class ApplicationController implements ModelListener, ViewListener {
     @Override
     public void trackAddedOrUpdated(ModelEvent event) {
         System.out.println("Controller: track added/updated " + event.getTrack().getId());
-        view.addOrUpdateTrackToView(event.getTrack());
+        //Generate renderable group
+        RenderableGroup renderables = trackRenderableConverter.generateRenderableGroup(event.getTrack());
+        event.getTrack();
+        view.addOrUpdateRenderables(renderables, event.getTrack().getPosition());
     }
 
     @Override

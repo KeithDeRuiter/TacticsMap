@@ -59,12 +59,21 @@ public class ApplicationController implements ModelListener, ViewListener {
     
     
     @Override
-    public void trackAddedOrUpdated(ModelEvent event) {
-        System.out.println("Controller: track added/updated " + event.getTrack().getId());
+    public void trackAdded(ModelEvent event) {
+        System.out.println("Controller: track added " + event.getTrack().getId());
         //Generate renderable group
         RenderableGroup renderables = trackRenderableConverter.generateRenderableGroup(event.getTrack());
         event.getTrack();
-        view.addOrUpdateRenderables(renderables, event.getTrack().getPosition());
+        view.addRenderables(renderables, event.getTrack().getPosition());
+    }
+    
+    @Override
+    public void trackUpdated(ModelEvent event) {
+        System.out.println("Controller: track updated " + event.getTrack().getId());
+        //Generate renderable group
+        RenderableGroup renderables = trackRenderableConverter.generateRenderableGroup(event.getTrack());
+        event.getTrack();
+        view.updateRenderables(renderables, event.getTrack().getPosition());
     }
 
     @Override

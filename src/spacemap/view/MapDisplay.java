@@ -39,6 +39,13 @@ public class MapDisplay {
         component.repaint();
     }
     
+    public void updateRenderableGroup(RenderableGroup group, Position position) {
+        IndividualGroupConfiguration config = new IndividualGroupConfiguration(group, position);
+        trackRenderableGroupConfigurations.put(group.getUuid(), config);
+        
+        component.repaint();
+    }
+    
     public void removeRenderablesForGroup(UUID id) {
         if (!trackRenderableGroupConfigurations.containsKey(id)) {
             System.out.println("Cannot remove renderables for Track " + id + ", ID does not exist in the Map Display");

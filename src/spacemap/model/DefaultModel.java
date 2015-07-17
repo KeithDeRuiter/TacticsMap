@@ -79,7 +79,7 @@ public class DefaultModel implements Model {
         ModelEvent event = new ModelEvent(track);
         
         listeners.stream().forEach((l) -> {
-            l.trackAddedOrUpdated(event);
+            l.trackAdded(event);
         });
     }
 

@@ -189,9 +189,18 @@ public class DefaultView implements View {
     }
 
     @Override
-    public void addOrUpdateRenderables(RenderableGroup renderableGroup, Position position) {
+    public void addRenderables(RenderableGroup renderableGroup, Position position) {
         trackIds.add(renderableGroup.getUuid());
         map.addRenderableGroup(renderableGroup, position);
+    }
+
+    @Override
+    public void updateRenderables(RenderableGroup renderableGroup, Position position) {
+        if (!trackIds.contains(renderableGroup.getUuid())) {
+            System.out.println("Cannot update group " + renderableGroup.getUuid() + ", unknown ID to the view.");
+            return;
+        }
+        map.updateRenderableGroup(renderableGroup, position);
     }
 
     @Override

@@ -23,11 +23,18 @@ public interface View {
     public void setDeclutterEnabled(boolean state);
     
     /**
-     * Adds or updates a Track to the view.
+     * Adds a group of renderables to the view.
      * @param renderableGroup The {@link RenderableGroup} to place in the view
      * @param position The position on the map to place the renderables.
      */
-    public void addOrUpdateRenderables(RenderableGroup renderableGroup, Position position);
+    public void addRenderables(RenderableGroup renderableGroup, Position position);
+    
+    /**
+     * Updates a group of renderables in the view.
+     * @param renderableGroup The {@link RenderableGroup} to update in the view
+     * @param position The position on the map to place the renderables.
+     */
+    public void updateRenderables(RenderableGroup renderableGroup, Position position);
     
     /**
      * Removes the object with the given UUID from the view.

@@ -54,6 +54,9 @@ public class DefaultView implements View {
     /** Text field for the name of new tracks. */
     private JTextField nameField;
     
+    /** Text field for the identifier of new tracks. */
+    private JTextField identifierField;
+    
     /** Text field for the number of randomly generated of new tracks. */
     private JTextField randomQuantityField;
     
@@ -91,7 +94,7 @@ public class DefaultView implements View {
                 Position p = map.getPositionForScreenCoordinates(new Coordinates(e.getX(), e.getY()));
                 HostilityLevel h = hostilityComboBox.getItemAt(hostilityComboBox.getSelectedIndex());
                 String n = nameField.getText();
-                notifyAllCreateTrack(p, h, n);
+                notifyAllCreateTrack(p, h, identifierField.getText(), n);
             }
         });
         frame.add(mapComponent, BorderLayout.CENTER);
@@ -101,15 +104,23 @@ public class DefaultView implements View {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.LINE_START;
+        
         
         gbc.gridx = 0;
         gbc.gridy = 0;
         controlPanel.add(new JLabel("Name:"), gbc);
         
         gbc.gridx++;
-        nameField = new JTextField("Name", 15);
+        nameField = new JTextField("Name", 10);
         controlPanel.add(nameField, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        controlPanel.add(new JLabel("Identifier:"), gbc);
+        
+        gbc.gridx++;
+        identifierField = new JTextField("0001", 6);
+        controlPanel.add(identifierField, gbc);
         
         gbc.gridx = 0;
         gbc.gridy++;
@@ -145,8 +156,9 @@ public class DefaultView implements View {
                 float y = rand.nextFloat() * map.getComponent().getHeight();
                 Position p = new Position(x, y);
                 HostilityLevel h = HOSTILITY_LEVELS[rand.nextInt(HOSTILITY_LEVELS.length)];
+                String identifier = "RT" + String.format("%04d",i);
                 
-                notifyAllCreateTrack(p, h, "Track " + String.valueOf(i));
+                notifyAllCreateTrack(p, h, identifier, "Track " + String.valueOf(i));
             }
         });
         controlPanel.add(randomGenerateButton, gbc);
@@ -165,9 +177,9 @@ public class DefaultView implements View {
         frame.add(controlPanel, BorderLayout.EAST);
     }
 
-    public void notifyAllCreateTrack(Position p, HostilityLevel hostility, String name) {
+    public void notifyAllCreateTrack(Position p, HostilityLevel hostility, String identifier, String name) {
         listeners.stream().forEach((l) -> {
-            l.createTrack(p, hostility, name);
+            l.createTrack(p, hostility, identifier, name);
         });
     }
 

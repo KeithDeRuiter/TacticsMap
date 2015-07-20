@@ -23,15 +23,19 @@ public class Track {
     
     /** The name of the object. */
     private String name;
+    
+    /** The identifier string of this track. */
+    private String identifier;
 
     /**
      * Creates a new instance of {@Track} with a random {@link UUID} and the given data.
      * @param position The position of the Track.
      * @param hostility The hostility of the Track.
+     * @param identifier The identifier 
      * @param name The name of the Track.
      */
-    public Track(Position position, HostilityLevel hostility, String name) {
-        this(UUID.randomUUID(), position, hostility, name);
+    public Track(Position position, HostilityLevel hostility, String identifier, String name) {
+        this(UUID.randomUUID(), position, hostility, identifier, name);
     }
 
     /**
@@ -40,17 +44,27 @@ public class Track {
      * @param id The UUID of the Track.
      * @param position The position of the Track.
      * @param hostility The hostility of the Track.
+     * @param identifier The identifier string fo rthis track.
      * @param name The name of the Track.
      */
-    public Track(UUID id, Position position, HostilityLevel hostility, String name) {
+    public Track(UUID id, Position position, HostilityLevel hostility, String identifier, String name) {
         this.id = id;
         this.position = position;
         this.hostility = hostility;
+        this.identifier = identifier;
         this.name = name;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Position getPosition() {

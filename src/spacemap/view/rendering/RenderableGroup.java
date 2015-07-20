@@ -1,8 +1,10 @@
 package spacemap.view.rendering;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,17 +16,17 @@ public class RenderableGroup {
     
     private final UUID uuid;
     
-    private final Set<RenderableText> m_texts;
+    private final List<RenderableText> m_texts;
 
-    private final Set<RenderableLine> m_lines;
+    private final List<RenderableLine> m_lines;
 
-    private final Set<RenderableSymbol> m_symbols;
+    private final List<RenderableSymbol> m_symbols;
 
     public RenderableGroup(UUID id) {
         this.uuid = id;
-        m_texts = new HashSet<>();
-        m_lines = new HashSet<>();
-        m_symbols = new HashSet<>();
+        m_texts = new ArrayList<>();
+        m_lines = new ArrayList<>();
+        m_symbols = new ArrayList<>();
     }
 
     public UUID getUuid() {
@@ -43,25 +45,25 @@ public class RenderableGroup {
         m_symbols.add(symbol);
     }
 
-    public Set<RenderableText> getTexts(){
-        return Collections.unmodifiableSet(m_texts);
+    public List<RenderableText> getTexts(){
+        return Collections.unmodifiableList(m_texts);
     }
 
-    public Set<RenderableLine> getLines(){
-        return Collections.unmodifiableSet(m_lines);
+    public List<RenderableLine> getLines(){
+        return Collections.unmodifiableList(m_lines);
     }
 
-    public Set<RenderableSymbol> getSymbols(){
-        return Collections.unmodifiableSet(m_symbols);
+    public List<RenderableSymbol> getSymbols(){
+        return Collections.unmodifiableList(m_symbols);
     }
     
-    public Set<Renderable> getAllRenderables() {
-        Set<Renderable> r = new HashSet<>();
+    public List<Renderable> getAllRenderables() {
+        List<Renderable> r = new ArrayList<>();
         r.addAll(m_texts);
         r.addAll(m_lines);
         r.addAll(m_symbols);
         
-        return Collections.unmodifiableSet(r);
+        return Collections.unmodifiableList(r);
     }
 
 }

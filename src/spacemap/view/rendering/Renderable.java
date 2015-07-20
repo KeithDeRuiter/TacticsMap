@@ -2,7 +2,6 @@ package spacemap.view.rendering;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 /**
  * The base class for Renderable objects.
@@ -28,19 +27,6 @@ public abstract class Renderable {
     public Color getColor(){
         return color;
     }
-
-//    /**
-//     * Gets the bounding box of this renderable.
-//     * @return 
-//     */
-//    public abstract Rectangle getBounds();
-//    
-//    /**
-//     * Moves the renderable by (dx, dy)
-//     * @param dx x movement
-//     * @param dy y movement
-//     */
-//    public abstract void translate(int dx, int dy);
     
     /**
      * Renders the renderable using the given {@code Graphics}.

@@ -18,10 +18,11 @@ public interface Model {
      * Creates a track.
      * @param position The position of the track to be created.
      * @param hostility The hostility of the track to be created.
+     * @param identifier The identifier of the track ot be created.
      * @param name The name of the track to be created.
      * @return The UUID of the generated track.
      */
-    public UUID createTrack(Position position, HostilityLevel hostility, String name);
+    public UUID createTrack(Position position, HostilityLevel hostility, String identifier, String name);
     /**
      * Creates a track.
      * @param id The UUID of the track being updated.

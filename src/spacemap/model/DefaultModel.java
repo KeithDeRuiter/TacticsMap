@@ -37,8 +37,8 @@ public class DefaultModel implements Model {
     
     
     @Override
-    public UUID createTrack(Position position, HostilityLevel hostility, String name) {
-        Track newTrack = new Track(position, hostility, name);
+    public UUID createTrack(Position position, HostilityLevel hostility, String identifier, String name) {
+        Track newTrack = new Track(position, hostility, identifier, name);
         tracks.put(newTrack.getId(), newTrack);
         notifyAllAddOrUpdateTrack(newTrack);
         

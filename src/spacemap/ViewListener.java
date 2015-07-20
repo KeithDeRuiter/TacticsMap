@@ -18,9 +18,10 @@ public interface ViewListener {
      * Indicates that a track should be created at the specified location.
      * @param position The position of the new track.
      * @param hostility The hostility of the new track.
+     * @param identifier The identifier of the new track.
      * @param name The name of the new track.
      */
-    public void createTrack(Position position, HostilityLevel hostility, String name);
+    public void createTrack(Position position, HostilityLevel hostility, String identifier, String name);
     
     /**
      * Indicates that the track with the given ID should be deleted.

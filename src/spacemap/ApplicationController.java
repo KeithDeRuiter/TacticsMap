@@ -52,9 +52,9 @@ public class ApplicationController implements ModelListener, ViewListener {
     }
 
     @Override
-    public void createTrack(Position position, HostilityLevel hostility, String name) {
-        System.out.println("Controller: create " + hostility.getName() + " \"" + name + " track at " + position);
-        model.createTrack(position, hostility, name);
+    public void createTrack(Position position, HostilityLevel hostility, String identifier, String name) {
+        System.out.println("Controller: create " + hostility.getName() + " track \"" + name + "\" identifier " + identifier + " at " + position);
+        model.createTrack(position, hostility, identifier, name);
     }
     
     

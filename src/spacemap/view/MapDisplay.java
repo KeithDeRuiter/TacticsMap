@@ -9,13 +9,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.swing.JComponent;
 import spacemap.model.track.Position;
 import spacemap.view.rendering.Coordinates;
+import spacemap.view.rendering.Renderable;
 import spacemap.view.rendering.RenderableGroup;
-import spacemap.view.rendering.RenderableSymbol;
 
 /**
  *
@@ -23,26 +24,29 @@ import spacemap.view.rendering.RenderableSymbol;
  */
 public class MapDisplay {
 
-    private final Map<UUID, IndividualGroupConfiguration> trackRenderableGroupConfigurations;
+    private final Map<UUID, IndividualRenderableGroupConfiguration> trackRenderableGroupConfigurations;
     
     private final DisplayComponent component;
+    
+    private RenderableCoordinatesProvider coordinateProvider;
     
     public MapDisplay() {
         trackRenderableGroupConfigurations = new HashMap<>();
         component = new DisplayComponent();
+        coordinateProvider = new DefaultRenderableCoordinatesProvider(this);
     }
     
     public void addRenderableGroup(RenderableGroup group, Position position) {
-        IndividualGroupConfiguration config = new IndividualGroupConfiguration(group, position);
+        IndividualRenderableGroupConfiguration config = new IndividualRenderableGroupConfiguration(group, position);
         trackRenderableGroupConfigurations.put(group.getUuid(), config);
-        
+        coordinateProvider.addRenderableConfiguration(config);
         component.repaint();
     }
     
     public void updateRenderableGroup(RenderableGroup group, Position position) {
-        IndividualGroupConfiguration config = new IndividualGroupConfiguration(group, position);
+        IndividualRenderableGroupConfiguration config = new IndividualRenderableGroupConfiguration(group, position);
         trackRenderableGroupConfigurations.put(group.getUuid(), config);
-        
+        coordinateProvider.addRenderableConfiguration(config);
         component.repaint();
     }
     
@@ -53,6 +57,7 @@ public class MapDisplay {
         }
         
         trackRenderableGroupConfigurations.remove(id);
+        coordinateProvider.removeRenderableConfiguration(id);
         
         component.repaint();
     }
@@ -75,6 +80,7 @@ public class MapDisplay {
     public Position getPositionForScreenCoordinates(Coordinates c) {
         return new Position(c.getX(), c.getY());
     }
+    
     
     private class DisplayComponent extends JComponent {
 
@@ -108,44 +114,24 @@ public class MapDisplay {
             }
             
             //Render Renderables
-            trackRenderableGroupConfigurations.values().stream().forEach((c) -> {
-                //Get graphics to transform and render this group
-                Coordinates coords = getScreenCoordinatesForPosition(c.getPosition());
-                Graphics2D groupGraphics = (Graphics2D)g2d.create();
-                groupGraphics.translate(coords.getX(), coords.getY());
+            trackRenderableGroupConfigurations.values().stream().forEach((IndividualRenderableGroupConfiguration c) -> {
+                Map<Renderable, Coordinates> renderablesWithCoordinates = coordinateProvider.getRenderableCoordinatesForGroup(c.getGroup().getUuid());
                 
-                //Do rendering
-                //Symbols
-                c.getGroup().getSymbols().stream().forEach((r) -> {
-                    r.render(groupGraphics);
-                });
+                //TODO maybe iterate over and draw original renderables, but get coordinates lookup from provider?
+                //You shouldn't need to get the actual renderables themselves from the provider...
                 
-                groupGraphics.translate(RenderableSymbol.BOX_SIDE, 0);
-                c.getGroup().getTexts().stream().forEach((r) -> {
-                    r.render(groupGraphics);
+                //Draw all of the group's renderables with their appropriate offset
+                List<Renderable> toRender = c.getGroup().getAllRenderables();
+                toRender.stream().forEach((renderableKey) -> {
+                    Graphics2D renderableGraphics = (Graphics2D)g2d.create();
+                    Coordinates renderableTransformCoordinates = renderablesWithCoordinates.get(renderableKey);
+                    renderableGraphics.translate(renderableTransformCoordinates.getX(), renderableTransformCoordinates.getY());
+                    renderableKey.render(renderableGraphics);
+                    renderableGraphics.dispose();
                 });
 
-                //Dispose graphics, no longer necessary
-                groupGraphics.dispose();
             });
         }    
     }
     
-    private class IndividualGroupConfiguration {
-        private final RenderableGroup group;
-        private final Position position;
-
-        public IndividualGroupConfiguration(RenderableGroup group, Position position) {
-            this.group = group;
-            this.position = position;
-        }
-
-        public RenderableGroup getGroup() {
-            return group;
-        }
-
-        public Position getPosition() {
-            return position;
-        }
-    }
 }
